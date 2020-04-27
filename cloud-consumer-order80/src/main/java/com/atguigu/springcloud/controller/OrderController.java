@@ -3,7 +3,6 @@ package com.atguigu.springcloud.controller;
 import com.atguigu.springcloud.entities.CommonResult;
 import com.atguigu.springcloud.entities.Payment;
 import com.atguigu.springcloud.lb.LoadBalancer;
-import com.atguigu.springcloud.lb.MyLB;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -50,5 +49,14 @@ public class OrderController {
         ServiceInstance serviceInstance=loadBalancer.instances(instances);
         URI uri=serviceInstance.getUri();
         return restTemplate.getForObject(uri+"/payment/lb",String.class);
+    }
+
+
+    // ====================> zipkin+sleuth
+    @GetMapping("/consumer/payment/zipkin")
+    public String paymentZipkin()
+    {
+        String result = restTemplate.getForObject("http://localhost:8001"+"/payment/zipkin/", String.class);
+        return result;
     }
 }
